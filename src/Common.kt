@@ -22,6 +22,13 @@ val <E> Set<E>.permutations: List<List<E>>
         minus(element).permutations.map { it + element }
     }
 
+val <E> Set<E>.combinations: Set<Set<E>>
+    get() = when (size) {
+        0 -> setOf(emptySet())
+        1 -> setOf(emptySet(), setOf(first()))
+        else -> setOf(emptySet<E>()) + map { element -> setOf(element) } + flatMap { element -> minus(element).combinations.map { it + element } }
+    }
+
 class MultiMap<K1, K2, V> : HashMap<K1, MultiMap.ValueMap<K2, V>>(), MutableMap<K1, MultiMap.ValueMap<K2, V>> {
     class ValueMap<K2, V> : HashMap<K2, V>(), MutableMap<K2, V> {
         override fun get(key: K2) = super.get(key) ?: throw IllegalAccessError()
