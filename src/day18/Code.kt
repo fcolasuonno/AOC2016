@@ -15,10 +15,9 @@ fun parse(input: List<String>) = input.map {
     it.map { tile -> tile == '^' }
 }.requireNoNulls().single().let { generateSequence(it) { prev ->
     prev.indices.map { index ->
-        val (left, center, right) = ((index - 1)..(index+1)).map { i -> prev.getOrNull(i) ?: false }
-        (center && ((left && !right) || (!left && right))) ||
-                (!center && !right && left) ||
-                (!center && right && !left)
+        val left = prev.getOrNull(index - 1) ?: false
+        val right = prev.getOrNull(index + 1) ?: false
+        left != right
     }
 } }
 
